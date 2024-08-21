@@ -5,7 +5,7 @@ import dlib
 import PySimpleGUI as sg
 import pandas as pd
 from datetime import datetime
-import pickle
+import pickle 
 import time
 
 # Load known faces

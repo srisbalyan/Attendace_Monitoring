@@ -99,3 +99,24 @@ If you encounter issues installing dlib:
 - Improved face detection using RetinaFace
 - Simplified the main script for better performance
 - Added FPS counter to the GUI
+
+## Recent Updates
+- Added comprehensive face analysis (emotion, age, gender)
+- Implemented attentiveness detection based on emotional state
+- Improved display stability for face information
+- Optimized face detection and analysis frequency
+- Enhanced multi-threading for better performance
+
+## Usage
+
+1. Ensure your webcam is connected and functioning.
+2. Run the script: `python classroom_attendance.py`
+3. Click the 'Start' button to begin face detection and analysis.
+4. The system will display:
+   - Bounding boxes around detected faces
+   - Name and confidence of recognized individuals
+   - Emotion, age, and gender for each detected face
+   - Attentiveness status based on emotional state
+5. Click 'Stop' to pause the detection and 'Exit' to close the application.
+
+Note: Face analysis is performed periodically to balance performance and accuracy.

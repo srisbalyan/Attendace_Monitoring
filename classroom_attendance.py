@@ -21,6 +21,7 @@ temp_encodings = {}
 
 for filename in os.listdir(known_faces_dir):
     if filename.endswith((".jpg", ".png", ".jpeg")):
+        # Extract the person's name by removing the unique identifier
         name_parts = os.path.splitext(filename)[0].split('_')
         name = '_'.join(name_parts[:-1])
         
@@ -32,12 +33,14 @@ for filename in os.listdir(known_faces_dir):
             temp_encodings[name] = []
         temp_encodings[name].append(embedding)
 
+# Calculate the average encoding for each person
 for name, encodings in temp_encodings.items():
     known_faces[name] = np.mean(encodings, axis=0)
     print(f"Calculated average encoding for {name} from {len(encodings)} images")
 
 print(f"Loaded {len(known_faces)} known faces.")
 
+# Function to recognize face
 def recognize_face(face_embedding):
     min_distance = float('inf')
     recognized_name = "Unknown"
@@ -46,13 +49,15 @@ def recognize_face(face_embedding):
         if distance < min_distance:
             min_distance = distance
             recognized_name = name
-    confidence = 1 - (min_distance / 2)
+    confidence = 1 - (min_distance / 2)  # Normalize confidence
     return recognized_name, confidence
 
+# Function to determine attentiveness based on emotion
 def determine_attentiveness(emotion):
     attentive_emotions = ['neutral', 'happy', 'surprise', 'fear']
     return "Attentive" if emotion in attentive_emotions else "Not Attentive"
 
+# Function to analyze faces using DeepFace
 def analyze_faces(frame, results):
     try:
         resized_frame = cv2.resize(frame, (640, 480))
@@ -78,12 +83,14 @@ layout = [
 window = sg.Window('Classroom Attendance System', layout, finalize=True)
 print("GUI setup complete")
 
+# Initialize variables
 cap = None
 prev_time = 0
 frame_count = 0
 ret = False
 face_data = []
 
+# Function to capture frames continuously
 def capture_frames():
     global cap, frame, ret
     while cap is not None:
@@ -100,7 +107,7 @@ while True:
 
     if event == 'Start' and cap is None:
         print("Start button pressed")
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0)  # Use 0 for default webcam
         if not cap.isOpened():
             print("Error: Could not open webcam")
             sg.popup("Error: Could not open webcam")
@@ -120,11 +127,13 @@ while True:
         try:
             frame_count += 1
             
+            # Calculate FPS
             current_time = time.time()
             fps = 1 / (current_time - prev_time)
             prev_time = current_time
 
-            if frame_count % 30 == 0 or not face_data:  # Analyze every 30 frames or if no faces detected yet
+            # Perform face analysis every 30 frames or if no faces detected yet
+            if frame_count % 30 == 0 or not face_data:
                 results = []
                 analysis_thread = threading.Thread(target=analyze_faces, args=(frame, results))
                 analysis_thread.start()
@@ -167,15 +176,19 @@ while True:
                 ]
 
                 font_scale = 0.5
-                font_color = (255, 255, 255)
-                font_thickness = 1
-                line_spacing = 15
+                font_color = (0, 0, 0)  # Changed to black as requested
+                font_thickness = 1  # Control font thickness for better visibility
+                line_spacing = 10  # Controls line spacing
 
                 text_x = x + w + 10
                 for i, line in enumerate(text_lines):
                     text_y = y + i * line_spacing + 20
+                    # Draw a white background for better text visibility
+                    (text_width, text_height), _ = cv2.getTextSize(line, cv2.FONT_HERSHEY_SIMPLEX, font_scale, font_thickness)
+                    cv2.rectangle(frame, (text_x - 2, text_y - text_height - 2), (text_x + text_width + 2, text_y + 2), (255, 255, 255), -1)
                     cv2.putText(frame, line, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_scale, font_color, font_thickness, cv2.LINE_AA)
 
+            # Update GUI
             imgbytes = cv2.imencode('.png', frame)[1].tobytes()
             window['-IMAGE-'].update(data=imgbytes)
             window['-COUNT-'].update(f'Face Count: {len(face_data)}')

@@ -120,3 +120,56 @@ If you encounter issues installing dlib:
 5. Click 'Stop' to pause the detection and 'Exit' to close the application.
 
 Note: Face analysis is performed periodically to balance performance and accuracy.
+
+## Recent Updates (MediaPipe Integration)
+
+- Replaced YOLO face detection with MediaPipe Face Detection for improved accuracy and performance
+- Streamlined the face detection process
+- Removed the maximum face limit for more flexible detection
+- Adjusted minimum face size for better detection of smaller faces
+- Optimized the main loop for smoother performance
+
+## MediaPipe Face Detection
+
+The latest version of the script (`Media_pipe.py`) uses MediaPipe Face Detection instead of YOLO. This change offers several benefits:
+
+- Improved accuracy in face detection
+- Faster processing, leading to better real-time performance
+- More stable detection across various lighting conditions and face orientations
+
+## Usage of Media_pipe.py
+
+1. Ensure you have installed the additional dependency: pip install mediapipe
+2. Run the script: python Media_pipe.py
+3. The GUI will open, showing the video feed from your webcam.
+4. Use the 'Start' button to begin face detection and recognition.
+5. Adjust the 'Confidence Threshold' slider to fine-tune detection sensitivity.
+6. Select a specific recognition model or use "All Models" for ensemble recognition.
+7. The system will display:
+- Bounding boxes around detected faces
+- Names and confidence scores of recognized individuals
+- Real-time face count and FPS (Frames Per Second)
+8. Use the 'Stop' button to pause detection and 'Exit' to close the application.
+
+## Configuration
+
+- `MIN_FACE_SIZE`: Minimum size (in pixels) for a face to be considered for detection (default: 10)
+- `CONFIDENCE_THRESHOLD`: Minimum confidence score for face detection (adjustable in GUI, default: 0.5)
+- `ANALYSIS_FREQUENCY`: How often to perform full face analysis (adjustable in GUI)
+
+## Performance Notes
+
+- The MediaPipe face detection model is optimized for real-time performance on CPU.
+- Face recognition is still performed using DeepFace models, which may be computationally intensive.
+- Adjust the analysis frequency and confidence threshold as needed to balance accuracy and performance.
+
+## Known Issues
+
+- Face recognition accuracy may vary depending on lighting conditions and face angles.
+- High CPU usage may occur during face recognition processes.
+
+## Future Improvements
+
+- Implement face tracking to reduce the need for constant re-recognition
+- Optimize face recognition process for better performance
+- Add option to save and load attendance records

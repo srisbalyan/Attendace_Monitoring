@@ -3,3 +3,8 @@ numpy
 PySimpleGUI
 pandas
 deepface
+ultralytics
+tensorflow
+tf-keras
+dlib
+mediapipe

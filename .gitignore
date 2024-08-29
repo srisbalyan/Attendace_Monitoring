@@ -5,3 +5,8 @@ __pycache__/
 attendance_*.csv
 known_faces.pkl
 *.csv
+known_faces_images/
+downloaded_images/
+known_faces_cache.pkl
+Testing.py
+Testing2.py

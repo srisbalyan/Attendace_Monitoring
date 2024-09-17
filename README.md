@@ -168,8 +168,47 @@ The latest version of the script (`Media_pipe.py`) uses MediaPipe Face Detection
 - Face recognition accuracy may vary depending on lighting conditions and face angles.
 - High CPU usage may occur during face recognition processes.
 
-## Future Improvements
 
-- Implement face tracking to reduce the need for constant re-recognition
-- Optimize face recognition process for better performance
-- Add option to save and load attendance records
+## Recent Updates (Web-based GUI)
+
+- Migrated from PySimpleGUI to a web-based interface using Flask
+- Implemented a responsive layout with video feed and settings side-by-side
+- Added real-time controls for face recognition parameters
+- Improved user experience with a more intuitive interface
+
+## Setup
+
+1. Clone the repository
+2. Create a virtual environment: `python -m venv venv`
+3. Activate the virtual environment
+4. Install dependencies: `pip install -r requirements.txt`
+5. Download required dlib models (see Dlib Models section for details)
+6. Run the Flask application: `python app.py`
+
+## Requirements
+
+- Python 3.7+
+- See requirements.txt for Python package dependencies
+- dlib face recognition models (not included in repo due to size)
+- Flask for web server
+
+## Usage
+
+1. Start the Flask server by running `python app.py`
+2. Open a web browser and navigate to `http://localhost:5000`
+3. Use the web interface to:
+   - Start/stop face recognition
+   - Adjust confidence threshold and minimum face size
+   - Select recognition models
+   - Toggle mood and attentiveness display
+   - Save attendance data
+   - Reload known faces
+   - Train custom ensemble model
+
+## Web Interface Features
+
+- Live video feed display
+- Real-time face detection and recognition
+- Adjustable settings for face detection parameters
+- Buttons for various system actions (start, stop, save attendance, etc.)
+- Responsive layout for different screen sizes

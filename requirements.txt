@@ -8,3 +8,10 @@ tensorflow
 tf-keras
 dlib
 mediapipe
+scikit-learn
+pip install openvino-dev #Enabling GPU Acceleration:While your system doesn't have a dedicated GPU, you can still leverage the integrated Intel UHD Graphics 770 for some acceleration. Here's how you can try to enable it:a. Install the Intel OpenVINO toolkit, which can help optimize and accelerate deep learning inference on Intel processors:
+tensorflow-intel
+#Set environment variables to use Intel's Math Kernel Library (MKL):
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '1'
+How long will it take to train custom ensemble, my system has Intel(R) UHD Graphics 770, having shared GPU memory 15.8 GB, The installed RAM is 31.7 GB. How can i enable the shared GPU to be used in the script. Mind that my system does not have separate GPU. My system has 12th Gen Core i7-12700

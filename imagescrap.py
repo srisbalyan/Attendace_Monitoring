@@ -53,15 +53,15 @@ def clean_filename(filename: str) -> str:
 
 def main():
     """Main function to orchestrate the scraping and downloading process."""
-    base_url = "https://www.lbsnaa.gov.in/course/participants_profile.php?cid=203&page={}"
-    download_path = os.path.join(os.getcwd(), "downloaded_images")
+    base_url = "https://www.lbsnaa.gov.in/course/participants_profile.php?cid=230&page={}"
+    download_path = os.path.join(os.getcwd(), "99_FC_downloaded_images")
     if not os.path.exists(download_path):
         os.makedirs(download_path)
 
     driver = initialize_driver()
 
     try:
-        for page in range(1, 17):  # 16 pages in total
+        for page in range(1, 56):  # 55 pages in total
             url = base_url.format(page)
 
             driver.get(url)
@@ -82,7 +82,7 @@ def main():
             for index, element in enumerate(image_elements, start=1):
                 img_url, title, cadre = extract_image_info(element)
                 
-                filename = f"{clean_filename(title)}_{clean_filename(cadre)}_2022.jpg"
+                filename = f"{clean_filename(title)}_{clean_filename(cadre)}_2024.jpg"
                 full_path = os.path.join(download_path, filename)
                 
                 if download_image(img_url, full_path):
@@ -103,3 +103,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

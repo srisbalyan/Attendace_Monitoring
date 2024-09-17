@@ -7,6 +7,10 @@ known_faces.pkl
 *.csv
 known_faces_images/
 downloaded_images/
+99_FC_downloaded_images/
 known_faces_cache.pkl
+v1_index.txt
+Ensemble.py
+MP_test.py
 Testing.py
 Testing2.py

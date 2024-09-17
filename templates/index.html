@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition System</title>
+    <!-- Import Google Font for modern styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Roboto', sans-serif;  /* Apply 'Roboto' font throughout the body */
+            background-color: #f4f4f4;  /* Set a light background color */
+            color: #333;  /* Set the default text color */
+        }
+
+        .container {
+            max-width: 1800px;  /* Limit the container's width to 900px */
+            margin: 20px auto;  /* Center the container with margins */
+            padding: 10px;  /* Add padding inside the container */
+            background-color: #fff;  /* White background for contrast */
+            border-radius: 8px;  /* Round the corners of the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Add a soft shadow for depth */
+        }
+
+        h1 {
+            font-size: 1.8em;  /* Increase the font size of the heading */
+            text-align: center;  /* Center the heading */
+            color: #2c3e50;  /* Dark blue text for the heading */
+        }
+
+        .video-container {
+            display: flex;  /* Flexbox for centering the video element */
+            justify-content: left;  /* Horizontally center the video */
+            margin: 20px 20;  /* Vertical margin around the video */
+            gap: 10px;
+            max-width: 100%;
+            height: fit-content;
+            flex: 0 1 auto;
+            margin-right: 20px;
+            margin-left: 40px;
+            margin-bottom: 10px;
+             
+        }
+
+        .video-container img {
+            border: 5px solid #eaeaea;  /* Add a light border around the video */
+            border-radius: 8px;  /* Rounded corners for the video */
+            max-width: 100%; /* Ensures the video fits within its container */
+            height: auto; /* Maintains aspect ratio */
+        }
+
+        .controls, .settings {
+            margin: 60px 0 auto;  /* Add vertical spacing for the controls and settings */
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        .controls button, .settings button {
+            background-color: #3498db;  /* Set button background color (blue) */
+            border: none;  /* Remove border for buttons */
+            color: white;  /* White text on buttons */
+            padding: 10px 20px;  /* Add padding inside the buttons */
+            margin: 10px 5px;  /* Margin around buttons */
+            border-radius: 5px;  /* Slightly rounded button corners */
+            cursor: pointer;  /* Show pointer cursor on hover */
+            transition: background-color 0.3s ease;  /* Smooth transition for hover effect */
+        }
+
+        .controls button:hover, .settings button:hover {
+            background-color: #2980b9;  /* Darken the button background on hover */
+        }
+
+        .settings h2 {
+            font-size: 1.5em;  /* Increase size for settings header */
+            margin-bottom: 25px;  /* Add space below the header */
+            color: #34495e;  /* Darker blue color for settings header */
+        }
+
+        /* Align settings controls (sliders and buttons) in a row using Flexbox */
+        .settings-row {
+            display: flex;  /* Use Flexbox for horizontal alignment */
+            flex-wrap: nowrap;  /* Allow wrapping to new lines if necessary */
+            align-items: flex-end;  /* Vertically align elements in the center */
+            gap: 50px;  /* Add space between items */
+            flex-direction: column; /* Stack settings vertically */
+            align-items: stretch; /* Stretch items to full width */
+           
+        }
+
+        label {
+            font-weight: 500;  /* Make label text slightly bolder */
+        }
+        
+        .settings-container {
+            flex: 0 0 0%; /* Takes up 25% of the width */
+            /*background-color: #eaeaea;#9e9a9a;*/
+            border-width: 1px;
+            border: 0px solid #ccc;  /* Light border for the box */
+            padding: 1px;  /* Add some padding inside the box */
+            border-radius: 0px;  /* Rounded corners for the box */
+            display: inline-block;  /* Keep the box inline to fit alongside other elements */
+        }
+
+        input[type="range"] {
+            width: 100px;  /* Set the width for sliders */
+        }
+
+        select, input, button {
+            padding: 10px;  /* Add padding to input elements and buttons */
+            font-size: 1em;  /* Set a consistent font size */
+            border-radius: 5px;  /* Slightly round input elements and buttons */
+            border: 1px solid #ccc;  /* Light border for input elements */
+        }
+
+        #confidence-threshold-value, #min-face-size-value {
+            font-weight: bold;  /* Bold the threshold and size values */
+            margin-left: 10px;  /* Add space to the left of the displayed values */
+            align-content: center;
+        }
+         /* Box styling for Confidence Threshold container */
+        .box {
+            border: 1px solid #ccc;  /* Light border for the box */
+            padding: 15px;  /* Add some padding inside the box */
+            border-radius: 8px;  /* Rounded corners for the box */
+            background-color: #f9f9f9;  /* Light background color for the box */
+            display:inline-flex  /* Keep the box inline to fit alongside other elements */
+        }
+    </style>   
+</head>
+<body>
+    <div class="container">
+        <h1>Face Recognition System</h1>
+        <div class="video-container">                               
+            <!-- Video stream display -->
+            <div class="video-container">
+                <img src="{{ url_for('video_feed') }}" width="1280" height="720">
+            </div>
+            
+            <div class="settings-container"></div>
+                <!-- Settings section, aligning sliders and buttons side by side -->
+                <div class="settings">
+                    <h2>Settings</h2>
+                    <div class="settings-row">
+                        <!-- Confidence Threshold inside a box -->
+                        <div class="box">
+                            <label for="confidence-threshold">Confidence Threshold:</label>
+                            <input type="range" id="confidence-threshold" min="0.1" max="1.0" step="0.1" value="0.7">
+                            <span id="confidence-threshold-value">0.7</span>
+                        </div>
+
+                        <!-- Minimum Face Size Slider inside a box-->
+                        <div class="box">
+                            <label for="min-face-size">Minimum Face Size:</label>
+                            <input type="range" id="min-face-size" min="10" max="200" step="1" value="10">
+                            <span id="min-face-size-value">10</span>
+                        </div>
+
+                        <!-- Recognition Model Dropdown inside a box -->
+                        <div class="box">
+                            <label for="recognition-model">Recognition Model:</label>
+                            <select id="recognition-model">
+                                {% for model in recognition_models %}
+                                <option value="{{ model }}">{{ model }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Update Settings Button -->
+                        <button onclick="updateSettings()">Update Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Control buttons for system actions -->
+        <div class="controls">
+            <select id="camera-select">
+                {% for camera in camera_sources %}
+                <option value="{{ camera }}">{{ camera }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="startRecognition()">Start</button>
+            <button onclick="stopRecognition()">Stop</button>
+            <button onclick="saveAttendance()">Save Attendance</button>
+            <button onclick="reloadKnownFaces()">Reload Known Faces</button>
+            <button onclick="toggleMood()">Toggle Mood Display</button>
+            <button onclick="toggleAttentiveness()">Toggle Attentiveness Display</button>
+            <button onclick="trainCustomEnsemble()">Train Custom Ensemble</button>
+        </div>    
+    </div>
+
+    <!-- jQuery scripts for handling control actions and settings changes -->
+    <script>
+        // Function to start face recognition with the selected camera
+        function startRecognition() {
+            $.post('/start', { camera: $('#camera-select').val() }, function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Function to stop face recognition
+        function stopRecognition() {
+            $.post('/stop', function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Function to save attendance data
+        function saveAttendance() {
+            $.post('/save_attendance', function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Function to reload known faces from the server
+        function reloadKnownFaces() {
+            $.post('/reload_known_faces', function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Function to toggle mood display on the video feed
+        function toggleMood() {
+            $.post('/toggle_mood', function(data) {
+                alert("Mood display " + (data.show_mood ? "enabled" : "disabled"));
+            });
+        }
+
+        // Function to toggle attentiveness display on the video feed
+        function toggleAttentiveness() {
+            $.post('/toggle_attentiveness', function(data) {
+                alert("Attentiveness display " + (data.show_attentiveness ? "enabled" : "disabled"));
+            });
+        }
+
+        // Function to update system settings like confidence threshold, face size, and recognition model
+        function updateSettings() {
+            $.post('/update_settings', {
+                confidence_threshold: $('#confidence-threshold').val(),
+                min_face_size: $('#min-face-size').val(),
+                recognition_model: $('#recognition-model').val()
+            }, function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Function to train the custom recognition model ensemble
+        function trainCustomEnsemble() {
+            $.post('/train_custom_ensemble', function(data) {
+                alert(data.message);
+            });
+        }
+
+        // Update displayed confidence threshold value as slider is moved
+        $('#confidence-threshold').on('input', function() {
+            $('#confidence-threshold-value').text($(this).val());
+        });
+
+        // Update displayed minimum face size value as slider is moved
+        $('#min-face-size').on('input', function() {
+            $('#min-face-size-value').text($(this).val());
+        });
+    </script>
+</body>
+</html>
+``
